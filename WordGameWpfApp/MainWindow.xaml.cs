@@ -86,6 +86,24 @@ namespace WordGameWpfApp
                 GameCompleteOverlay.Visibility = Visibility.Hidden;
         }
 
+        public void DisplayGameOver(Grid GameCompleteOverlay, WordGame game, TextBox PlayedScore, TextBox WonPercentageScore, TextBox CurrentStreakScore, TextBox MaxStreakScore, TextBox SwapCountScore, TextBox WordCountScore, TextBox WonOrLostDisplay)
+        {
+            WonOrLostDisplay.Text = game.GetWonOrLostDisplay();
+            PlayedScore.Text = game.GetPlayedScore().ToString();
+            WonPercentageScore.Text = game.GetWonPercentageScore().ToString();
+            CurrentStreakScore.Text = game.GetCurrentStreakScore().ToString();
+            MaxStreakScore.Text = game.GetMaxStreakScore().ToString();
+            if(game.GetMaxSwaps() == 0)
+            {
+                SwapCountScore.Text = game.GetSwapCountScore().ToString() + "/∞";
+            } else
+            {
+                SwapCountScore.Text = game.GetSwapCountScore().ToString() + "/" + game.GetMaxSwaps().ToString();
+            }
+            WordCountScore.Text = game.GetFoundWordCount().ToString();
+
+        }
+
         public Point ConvertPosToGridIndex(Point pos)
         {
             Point index;
@@ -127,6 +145,8 @@ namespace WordGameWpfApp
             public string word;
             public List<Point> indexes;
         };
+
+
 
         public WordGame()
         {
@@ -384,12 +404,12 @@ namespace WordGameWpfApp
             if (win)
             {
                 m_state = GameCompleteState.COMPLETE_WIN;
-                //SetPNGSource();
+                UpdateGameOverScores();
             }
             else if (m_MaxSwaps > 0 && m_swapCounter >= m_MaxSwaps)
             {
                 m_state = GameCompleteState.COMPLETE_LOSE;
-                //SetPNGSource();
+                UpdateGameOverScores();
             }
             else m_state = GameCompleteState.NOT_COMPLETE;
         }
@@ -429,10 +449,68 @@ namespace WordGameWpfApp
             return false;
         }
 
+        private void UpdateGameOverScores()
+        {
+            m_playedScore += 1;
+
+            if (m_state == GameCompleteState.COMPLETE_WIN)
+            {
+                m_WonOrLostDisplay = "You Won!";
+                m_wonTotal += 1;
+                m_currentStreakScore += 1;
+                if (m_currentStreakScore > m_maxStreakScore)
+                {
+                    m_maxStreakScore = m_currentStreakScore;
+                }
+
+            } else if (m_state == GameCompleteState.COMPLETE_LOSE)
+            {
+                m_WonOrLostDisplay = "You Lost :(";
+                m_lostTotal += 1;
+                m_currentStreakScore = 0;
+            }
+            m_wonPercentageScore = m_wonTotal / m_playedScore * 100;
+        }
+
+
+
         public enum GameCompleteState { NOT_COMPLETE, COMPLETE_WIN, COMPLETE_LOSE };
         public GameCompleteState IsGameComplete()
         {
             return m_state;
+        }
+
+        public string GetWonOrLostDisplay()
+        {
+            return m_WonOrLostDisplay;
+        }
+        public int GetPlayedScore() //ADD REST
+        {
+            return m_playedScore;
+        }
+        public int GetWonPercentageScore()
+        {
+            return m_wonPercentageScore;
+        }
+        public int GetCurrentStreakScore()
+        {
+            return m_currentStreakScore;
+        }
+        public int GetMaxStreakScore()
+        {
+            return m_maxStreakScore;
+        }
+        public int GetSwapCountScore()
+        {
+            return m_swapCounter;
+        }
+        public int GetMaxSwaps()
+        {
+            return m_MaxSwaps;
+        }
+        public void SetMaxSwaps(int maxSwaps)
+        {
+            m_MaxSwaps = maxSwaps;
         }
 
         Lexicon m_lexicon = new Lexicon();
@@ -444,6 +522,14 @@ namespace WordGameWpfApp
         private List<FoundWord> m_foundWords;
         private int m_swapCounter;
         private GameCompleteState m_state;
+
+        private String m_WonOrLostDisplay;
+        private int m_playedScore;
+        private int m_wonPercentageScore;
+        private int m_wonTotal;
+        private int m_lostTotal;
+        private int m_currentStreakScore;
+        private int m_maxStreakScore;
     }
 
 
@@ -463,8 +549,11 @@ namespace WordGameWpfApp
             m_game = new WordGame();
             m_game.Reset(GridSize.SelectedIndex);
 
+
             drawGrid.DrawRectangles(LetterGrid, GameCompleteOverlay, m_game, m_HoverIndex, m_DragStartIndex);
-            
+            drawGrid.DisplayGameOver(GameCompleteOverlay, m_game, PlayedScore, WonPercentageScore, CurrentStreakScore, MaxStreakScore, SwapCountScore, WordCountScore, WonOrLostDisplay);
+
+
             WordCount.Text = m_game.GetFoundWordCount().ToString();
             Words.Text = string.Join("\n",m_game.GetFoundWords());
             SwapCounter.Text = m_game.GetSwapCounter().ToString();
@@ -490,6 +579,7 @@ namespace WordGameWpfApp
 
                 Words.Text = string.Join("\n", m_game.GetFoundWords());
                 drawGrid.DrawRectangles(LetterGrid, GameCompleteOverlay, m_game, m_HoverIndex, m_DragStartIndex);
+                drawGrid.DisplayGameOver(GameCompleteOverlay, m_game, PlayedScore, WonPercentageScore, CurrentStreakScore, MaxStreakScore, SwapCountScore, WordCountScore, WonOrLostDisplay);
                 WordCount.Text = m_game.GetFoundWordCount().ToString();
                 SwapCounter.Text = (m_game.GetSwapCounter().ToString() + "/∞");
                 //m_game.IsIndexInAFoundWord(m_HoverIndex);
@@ -501,7 +591,7 @@ namespace WordGameWpfApp
         {
             Point index = drawGrid.ConvertPosToGridIndex(e.GetPosition(LetterGrid));
 
-            if (m_HoverIndex != index)
+            if (m_HoverIndex != index && m_game.IsGameComplete() == WordGame.GameCompleteState.NOT_COMPLETE)
             {
                 m_HoverIndex = index;
 
@@ -511,6 +601,10 @@ namespace WordGameWpfApp
 
         private void Reset_Button(object sender, RoutedEventArgs e)
         {
+            if (InputMaxSwaps.Text != "")
+            {
+                m_game.SetMaxSwaps(int.Parse(InputMaxSwaps.Text));
+            }
             m_game.Reset(GridSize.SelectedIndex);
 
             drawGrid.DrawRectangles(LetterGrid, GameCompleteOverlay, m_game, m_HoverIndex, m_DragStartIndex);
@@ -519,6 +613,14 @@ namespace WordGameWpfApp
             Words.Text = string.Join("\n", m_game.GetFoundWords());
             SwapCounter.Text = (m_game.GetSwapCounter().ToString() + "/∞");
             GameCompleteOverlay.Visibility = Visibility.Hidden;
+        }
+
+        private void LetterGrid_Background_MouseDown(object sender, RoutedEventArgs e)
+        {
+            if (GameCompleteOverlay.Visibility == Visibility.Visible)
+            {
+                GameCompleteOverlay.Visibility = Visibility.Hidden;
+            }
         }
 
         /*public void ScoreUpdater(int PlayedCount, int WonPercentage, int CurrentStreak, int MaxStreak, int SwapCountScore, int WordCountScore)

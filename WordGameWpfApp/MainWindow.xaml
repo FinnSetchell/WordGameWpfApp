@@ -8,32 +8,24 @@
         Title="Word Game" WindowStartupLocation="CenterScreen" Height="530" Width="566">
     <Grid Margin="0,0,10,0">
 
-        <Canvas Name="LetterGrid" Margin="32,126,240,129" RenderTransformOrigin="0.5,0.5" MouseDown="LetterGrid_MouseDown" MouseUp="LetterGrid_MouseUp" MouseMove="LetterGrid_MouseMove"/>
+        <Canvas Name="LetterGrid" Margin="32,126,240,129" RenderTransformOrigin="0.5,0.5" MouseDown="LetterGrid_MouseDown" MouseUp="LetterGrid_MouseUp" MouseMove="LetterGrid_MouseMove" Grid.ColumnSpan="2"/>
 
-        <TextBox IsReadOnly="True"  FontSize="18" Margin="347,72,0,0" FontFamily="consolas" RenderTransformOrigin="0.563,0.584" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="70" BorderBrush="{x:Null}">Words:</TextBox>
-        <TextBox  IsReadOnly="True" x:Name="WordCount" FontSize="24" Margin="422,64,14,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
-        <TextBox  IsReadOnly="True" x:Name="Words" FontSize="12" FontFamily="Consolas" Margin="347,119,14,129" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+        <TextBox IsReadOnly="True"  FontSize="18" Margin="71,72,0,0" FontFamily="consolas" RenderTransformOrigin="0.563,0.584" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="70" BorderBrush="{x:Null}" Grid.Column="1">Words:</TextBox>
+        <TextBox  IsReadOnly="True" x:Name="WordCount" FontSize="24" Margin="146,64,14,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Grid.Column="1"/>
+        <TextBox  IsReadOnly="True" x:Name="Words" FontSize="12" FontFamily="Consolas" Margin="0,119,14,129" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Right" Width="198"/>
         <TextBox   IsReadOnly="True" FontSize="18" Margin="29,72,0,0" FontFamily="consolas" RenderTransformOrigin="0.563,0.584" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66" Text="Swaps:" BorderBrush="{x:Null}"/>
-        <TextBox IsReadOnly="True" x:Name="SwapCounter" FontSize="24" Margin="100,64,0,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="216" Background="{x:Null}" BorderBrush="{x:Null}"/>
-        <TextBox  IsReadOnly="True" FontSize="38" FontFamily="consolas" Margin="87,7,87,0" VerticalAlignment="Top" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}">Splot!</TextBox>
+        <TextBox IsReadOnly="True" x:Name="SwapCounter" FontSize="24" Margin="100,64,0,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="216" Background="{x:Null}" BorderBrush="{x:Null}" Grid.ColumnSpan="2"/>
+        <TextBox  IsReadOnly="True" FontSize="38" FontFamily="consolas" Margin="212,7,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Grid.ColumnSpan="2" Height="46" Width="131">Splot!</TextBox>
 
 
 
 
         <!--Game Over Code-->
-        <Grid x:Name="GameCompleteOverlay" VerticalAlignment="Center" HorizontalAlignment="Center" Width="556">
-            <TextBox FontSize="38" FontFamily="consolas" Height="514" FontWeight="Bold" VerticalAlignment="Center" BorderBrush="Transparent" Foreground="#FFDE0404" Background="#7fFFFFFF" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Grid x:Name="GameCompleteOverlay" VerticalAlignment="Top" HorizontalAlignment="Left" Width="556" Margin="0,54,0,0" Grid.ColumnSpan="2" Height="387">
             <!--Game Over Overlay-->
-            <Canvas Margin="0,0,-10,0">
-                <Rectangle Height="54" Width="50" Canvas.Left="125" Canvas.Top="68">
-                    <Rectangle.Fill>
-                        <RadialGradientBrush>
-                            <GradientStop Color="Black" Offset="0"/>
-                            <GradientStop Color="White" Offset="1"/>
-                        </RadialGradientBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
-                <Rectangle Height="76" Width="61" Canvas.Left="125" Canvas.Top="68">
+            <Canvas Margin="0,-8,-10,0">
+                <Rectangle MouseLeftButtonDown="LetterGrid_Background_MouseDown" Height="525" VerticalAlignment="Top" HorizontalAlignment="Center" Width="566" Canvas.Top="-56" Fill="#7FFFFFFF"/>
+                <Rectangle Height="76" Width="62" Canvas.Left="128" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Rectangle.Fill>
                         <RadialGradientBrush>
                             <GradientStop Color="Black" Offset="0"/>
@@ -49,7 +41,7 @@
                         </RadialGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Rectangle Height="76" Width="70" Canvas.Left="365" Canvas.Top="60">
+                <Rectangle Height="76" Width="70" Canvas.Left="371" Canvas.Top="4">
                     <Rectangle.Fill>
                         <RadialGradientBrush>
                             <GradientStop Color="Black" Offset="0"/>
@@ -76,7 +68,7 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Rectangle Height="49" Width="257" Canvas.Left="150" Canvas.Top="60">
+                <Rectangle Height="41" Width="256" Canvas.Left="150" Canvas.Top="4" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FE0D0D0D" Offset="1"/>
@@ -86,7 +78,7 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Rectangle Height="46" Width="300" Canvas.Left="264" Canvas.Top="216" RenderTransformOrigin="0.5,0.5">
+                <Rectangle Height="46" Width="366" Canvas.Left="231" Canvas.Top="183" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -104,7 +96,7 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Rectangle Height="46" Width="300" Canvas.Left="-7" Canvas.Top="215" RenderTransformOrigin="0.5,0.5">
+                <Rectangle Height="46" Width="352" Canvas.Left="-33" Canvas.Top="189" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Rectangle.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -122,24 +114,25 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Rectangle Height="318" Width="280" Canvas.Left="138" Canvas.Top="80" Fill="White" RadiusX="10" RadiusY="10"/>
-                <Rectangle Height="109" Width="239" Canvas.Left="159" Canvas.Top="203" Fill="#FFC9C9C9" RadiusX="10" RadiusY="10"/>
+                <Rectangle Height="377" Width="280" Canvas.Left="138" Canvas.Top="21" Fill="White" RadiusX="10" RadiusY="10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <Rectangle Height="169" Width="239" Canvas.Left="159" Canvas.Top="143" Fill="#FFC9C9C9" RadiusX="10" RadiusY="10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 <Rectangle Height="92" Width="2" Canvas.Left="277" Canvas.Top="212" Fill="White"/>
             </Canvas>
 
-            <TextBox Margin="219,88,0,0" FontSize="18" FontFamily="consolas" BorderBrush="White" HorizontalAlignment="Left" Width="118" Height="26" VerticalAlignment="Top">Statistics:</TextBox>
+            <TextBox Margin="0,27,0,0" FontSize="18" FontFamily="consolas" BorderBrush="White" HorizontalAlignment="Center" Width="118" Height="26" VerticalAlignment="Top">Statistics:</TextBox>
             <!--Score Titles-->
-            <TextBox Margin="158,158,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="played" TextAlignment="Center" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
-            <TextBox Margin="223,158,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="won %" TextAlignment="Center" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
-            <TextBox Margin="338,157,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="max&#xD;&#xA;streak" RenderTransformOrigin="0.5,0.5" TextAlignment="Center" Height="39" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
+            <TextBox Margin="158,91,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="played" TextAlignment="Center" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
+            <TextBox Margin="223,91,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="won %" TextAlignment="Center" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
+            <TextBox Margin="338,90,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="max&#xD;&#xA;streak" RenderTransformOrigin="0.5,0.5" TextAlignment="Center" Height="39" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
 
-            <TextBox Margin="278,157,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="current&#xD;&#xA;streak" TextAlignment="Center" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
+            <TextBox Margin="278,90,0,0" FontSize="14" FontFamily="consolas" BorderBrush="White" Text="current&#xD;&#xA;streak" TextAlignment="Center" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
             <!--Scores-->
-            <TextBox x:Name="PlayedScore" Margin="158,124,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" HorizontalAlignment="Left" Width="54" Height="34" VerticalAlignment="Top"/>
-            <TextBox x:Name="MaxStreakScore" Margin="338,124,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" HorizontalAlignment="Left" Width="55" Height="34" VerticalAlignment="Top"/>
-            <TextBox x:Name="CurrentStreakScore" Margin="278,124,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
-            <TextBox x:Name="WonPercentageScore" Margin="223,124,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
+            <TextBox x:Name="PlayedScore" Margin="158,57,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" HorizontalAlignment="Left" Width="54" Height="34" VerticalAlignment="Top"/>
+            <TextBox x:Name="MaxStreakScore" Margin="338,57,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" HorizontalAlignment="Left" Width="55" Height="34" VerticalAlignment="Top"/>
+            <TextBox x:Name="CurrentStreakScore" Margin="278,57,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
+            <TextBox x:Name="WonPercentageScore" Margin="223,57,0,0" FontSize="30" FontFamily="consolas" BorderBrush="White" Text="0" TextAlignment="Center" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="55"/>
 
+            <TextBox x:Name="WonOrLostDisplay" Margin="171,141,171,182" FontSize="36" FontFamily="consolas" BorderBrush="#00000000" Text="You Won!" TextAlignment="Center" Background="Transparent" Foreground="White" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
             <TextBox Margin="190,267,0,0" FontSize="20" FontFamily="consolas" BorderBrush="#00000000" Text="Swaps" TextAlignment="Center" Background="Transparent" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="68"/>
             <TextBox x:Name="SwapCountScore" Margin="171,210,0,0" FontSize="40" FontFamily="consolas" BorderBrush="#00000000" Text="0/∞" TextAlignment="Center" Background="Transparent" Foreground="White" Height="47" VerticalAlignment="Top" HorizontalAlignment="Left" Width="107"/>
             <TextBox Margin="298,267,0,0" FontSize="20" FontFamily="consolas" BorderBrush="#00000000" Text="Words" TextAlignment="Center" Background="Transparent" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="68"/>
@@ -152,11 +145,13 @@
 
 
         </Grid>
-        <ComboBox x:Name="GridSize" HorizontalAlignment="Center" Margin="0,0,0,69" Width="146" SelectedIndex="0" IsReadOnly="True" Height="25" VerticalAlignment="Bottom">
+        <ComboBox x:Name="GridSize" HorizontalAlignment="Left" Margin="396,0,0,22" Width="146" SelectedIndex="0" IsReadOnly="True" Height="24" VerticalAlignment="Bottom">
             <ComboBoxItem Content="Easy"/>
             <ComboBoxItem Content="Hard"/>
             <ComboBoxItem Content="Impossible"/>
         </ComboBox>
-        <Button Click="Reset_Button" FontSize="30" FontFamily="consolas" Margin="0,0,0,24" HorizontalAlignment="Center" Width="146" Height="40" VerticalAlignment="Bottom">New game</Button>
+        <Button Click="Reset_Button" FontSize="30" FontFamily="consolas" Margin="205,0,0,17" HorizontalAlignment="Left" Width="146" Grid.ColumnSpan="2" Height="40" VerticalAlignment="Bottom">New game</Button>
+        <TextBox x:Name="InputMaxSwaps" HorizontalAlignment="Left" Margin="123,0,0,25" Width="51" Height="18" VerticalAlignment="Bottom"/>
+        <TextBox Text="Enter max swaps:" HorizontalAlignment="Left" Margin="22,0,0,25" Width="101" Height="18" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
