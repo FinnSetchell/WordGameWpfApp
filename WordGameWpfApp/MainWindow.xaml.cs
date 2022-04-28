@@ -114,7 +114,7 @@ namespace WordGameWpfApp
         }
 
     }
-
+    
     public class Lexicon
     {
         public Lexicon()
@@ -531,10 +531,6 @@ namespace WordGameWpfApp
         private int m_maxStreakScore;
     }
 
-
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -581,7 +577,6 @@ namespace WordGameWpfApp
                 drawGrid.DisplayGameOver(GameCompleteOverlay, m_game, PlayedScore, WonPercentageScore, CurrentStreakScore, MaxStreakScore, SwapCountScore, WordCountScore, WonOrLostDisplay);
                 WordCount.Text = m_game.GetFoundWordCount().ToString();
                 SetSwapCountDisplay();
-                //m_game.IsIndexInAFoundWord(m_HoverIndex);
             }
         }
 
@@ -632,13 +627,6 @@ namespace WordGameWpfApp
                 GameCompleteOverlay.Visibility = Visibility.Hidden;
             }
         }
-
-        /*public void ScoreUpdater(int PlayedCount, int WonPercentage, int CurrentStreak, int MaxStreak, int SwapCountScore, int WordCountScore)
-        {
-            SwapCountScore.text = m_game.GetSwapCounter().ToString();
-            WordCountScore = m_game.GetFoundWordCount();
-
-        }*/
 
         WordGame m_game;
         private DrawGrid drawGrid = new DrawGrid();
