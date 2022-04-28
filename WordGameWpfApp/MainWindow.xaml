@@ -10,18 +10,18 @@
 
         <Canvas Name="LetterGrid" Margin="32,126,240,129" RenderTransformOrigin="0.5,0.5" MouseDown="LetterGrid_MouseDown" MouseUp="LetterGrid_MouseUp" MouseMove="LetterGrid_MouseMove" Grid.ColumnSpan="2"/>
 
-        <TextBox IsReadOnly="True"  FontSize="18" Margin="71,72,0,0" FontFamily="consolas" RenderTransformOrigin="0.563,0.584" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="70" BorderBrush="{x:Null}" Grid.Column="1">Words:</TextBox>
-        <TextBox  IsReadOnly="True" x:Name="WordCount" FontSize="24" Margin="146,64,14,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Grid.Column="1"/>
+        <TextBox IsReadOnly="True"  FontSize="18" Margin="278,72,0,0" FontFamily="consolas" RenderTransformOrigin="0.563,0.584" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="70" BorderBrush="{x:Null}">Words:</TextBox>
+        <TextBox  IsReadOnly="True" x:Name="WordCount" FontSize="24" Margin="348,64,14,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}"/>
         <TextBox  IsReadOnly="True" x:Name="Words" FontSize="12" FontFamily="Consolas" Margin="0,119,14,129" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Right" Width="198"/>
         <TextBox   IsReadOnly="True" FontSize="18" Margin="29,72,0,0" FontFamily="consolas" RenderTransformOrigin="0.563,0.584" Height="34" VerticalAlignment="Top" HorizontalAlignment="Left" Width="66" Text="Swaps:" BorderBrush="{x:Null}"/>
-        <TextBox IsReadOnly="True" x:Name="SwapCounter" FontSize="24" Margin="100,64,0,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="216" Background="{x:Null}" BorderBrush="{x:Null}" Grid.ColumnSpan="2"/>
+        <TextBox IsReadOnly="True" x:Name="SwapCounter" FontSize="24" Margin="99,64,0,0" FontFamily="Consolas" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Width="179" Background="{x:Null}" BorderBrush="{x:Null}"/>
         <TextBox  IsReadOnly="True" FontSize="38" FontFamily="consolas" Margin="212,7,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Grid.ColumnSpan="2" Height="46" Width="131">Splot!</TextBox>
 
 
 
 
         <!--Game Over Code-->
-        <Grid x:Name="GameCompleteOverlay" VerticalAlignment="Top" HorizontalAlignment="Left" Width="556" Margin="0,54,0,0" Grid.ColumnSpan="2" Height="387">
+        <Grid Visibility="Hidden" x:Name="GameCompleteOverlay" VerticalAlignment="Top" HorizontalAlignment="Left" Width="556" Margin="0,54,0,0" Grid.ColumnSpan="2" Height="387">
             <!--Game Over Overlay-->
             <Canvas Margin="0,-8,-10,0">
                 <Rectangle MouseLeftButtonDown="LetterGrid_Background_MouseDown" Height="525" VerticalAlignment="Top" HorizontalAlignment="Center" Width="566" Canvas.Top="-56" Fill="#7FFFFFFF"/>

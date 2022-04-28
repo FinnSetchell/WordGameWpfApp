@@ -93,7 +93,7 @@ namespace WordGameWpfApp
             WonPercentageScore.Text = game.GetWonPercentageScore().ToString();
             CurrentStreakScore.Text = game.GetCurrentStreakScore().ToString();
             MaxStreakScore.Text = game.GetMaxStreakScore().ToString();
-            if(game.GetMaxSwaps() == 0)
+            if(game.GetMaxSwaps() <= 0)
             {
                 SwapCountScore.Text = game.GetSwapCountScore().ToString() + "/∞";
             } else
@@ -101,7 +101,6 @@ namespace WordGameWpfApp
                 SwapCountScore.Text = game.GetSwapCountScore().ToString() + "/" + game.GetMaxSwaps().ToString();
             }
             WordCountScore.Text = game.GetFoundWordCount().ToString();
-
         }
 
         public Point ConvertPosToGridIndex(Point pos)
@@ -556,7 +555,7 @@ namespace WordGameWpfApp
 
             WordCount.Text = m_game.GetFoundWordCount().ToString();
             Words.Text = string.Join("\n",m_game.GetFoundWords());
-            SwapCounter.Text = m_game.GetSwapCounter().ToString();
+            SetSwapCountDisplay();
         }
 
         private void LetterGrid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -581,11 +580,22 @@ namespace WordGameWpfApp
                 drawGrid.DrawRectangles(LetterGrid, GameCompleteOverlay, m_game, m_HoverIndex, m_DragStartIndex);
                 drawGrid.DisplayGameOver(GameCompleteOverlay, m_game, PlayedScore, WonPercentageScore, CurrentStreakScore, MaxStreakScore, SwapCountScore, WordCountScore, WonOrLostDisplay);
                 WordCount.Text = m_game.GetFoundWordCount().ToString();
-                SwapCounter.Text = (m_game.GetSwapCounter().ToString() + "/∞");
+                SetSwapCountDisplay();
                 //m_game.IsIndexInAFoundWord(m_HoverIndex);
             }
         }
 
+        private void SetSwapCountDisplay()
+        {
+            if (m_game.GetMaxSwaps() <= 0)
+            {
+                SwapCounter.Text = m_game.GetSwapCounter().ToString() + "/∞";
+            }
+            else
+            {
+                SwapCounter.Text = m_game.GetSwapCounter().ToString() + "/" + m_game.GetMaxSwaps().ToString();
+            }
+        }
 
         private void LetterGrid_MouseMove(object sender, MouseEventArgs e)
         {
@@ -611,7 +621,7 @@ namespace WordGameWpfApp
 
             WordCount.Text = m_game.GetFoundWordCount().ToString();
             Words.Text = string.Join("\n", m_game.GetFoundWords());
-            SwapCounter.Text = (m_game.GetSwapCounter().ToString() + "/∞");
+            SetSwapCountDisplay();
             GameCompleteOverlay.Visibility = Visibility.Hidden;
         }
 
