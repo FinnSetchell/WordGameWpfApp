@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
+using System.Timers;
 
 namespace WordGameWpfApp
 {
@@ -131,7 +133,7 @@ namespace WordGameWpfApp
                 SwapCountScore.Text = game.GetSwapCountScore().ToString() + "/" + game.GetMaxSwaps().ToString();
             }
             //update the word count score 
-            WordCountScore.Text = game.GetFoundWordCount().ToString();
+            WordCountScore.Text = game.CalculateScores().ToString();
         }
 
         public Point ConvertPosToGridIndex(Point pos)
@@ -209,56 +211,75 @@ namespace WordGameWpfApp
         {
             m_state = GameCompleteState.NOT_COMPLETE;  //makes the game not complete
             int MaxNumWords;
+            int salt = 0;
 
             Dictionary<char, int> letters; //declares a dictionary where the key is a letter and the value is an int (scrabble value)
             switch (difficulty) //switch to execute certain code based on the difficulty
             {
                 case 0:
-                    m_gridSize = 3; //sets the game settings
-                    m_allowDiagonals = true;
+                default:
+                    // DAILY CHALLENGE MODE
+                    // set the salt based on date
+                    salt = DateTime.Today.Ticks.GetHashCode();
+
+                    m_gridSize = 4; //sets the game settings
+                    m_allowDiagonals = false;
                     m_minWordLength = 3;
-                    MaxNumWords = 1;
+                    MaxNumWords = 2;
+                    SetMaxSwaps(10);
                     letters = new Dictionary<char, int>() //fills letters with the alphabet and its values
-            {
-                {'a', 9}, {'b', 2},  {'c', 2}, {'d', 4}, {'e', 12}, {'f', 2}, {'g', 3},{'h', 2},
-                {'i', 9}, {'j', 1}, {'k', 1}, {'l', 4}, {'m', 2}, {'n', 6}, {'o', 8}, {'p', 2},
-                {'q', 0}, {'r', 6}, {'s', 4}, {'t', 6}, {'u', 4}, {'v', 2}, {'w', 2}, {'x', 1},
-                {'y', 2}, {'z', 0}
-            };
+                    {
+                        {'a', 9}, {'b', 2},  {'c', 2}, {'d', 4}, {'e', 12}, {'f', 2}, {'g', 3},{'h', 2},
+                        {'i', 9}, {'j', 1}, {'k', 1}, {'l', 4}, {'m', 2}, {'n', 6}, {'o', 8}, {'p', 2},
+                        {'q', 0}, {'r', 6}, {'s', 4}, {'t', 6}, {'u', 4}, {'v', 2}, {'w', 2}, {'x', 1},
+                        {'y', 2}, {'z', 0}
+                    };
                     break;
-                case 1:
+                case 2:
                     m_gridSize = 4; //sets the game settings
                     m_allowDiagonals = false;
                     m_minWordLength = 3;
                     MaxNumWords = 2;
                     letters = new Dictionary<char, int>() //fills letters with the alphabet and its values
-            {
-                {'a', 9}, {'b', 2},  {'c', 2}, {'d', 4}, {'e', 12}, {'f', 2}, {'g', 3},{'h', 2},
-                {'i', 9}, {'j', 1}, {'k', 1}, {'l', 4}, {'m', 2}, {'n', 6}, {'o', 8}, {'p', 2},
-                {'q', 0}, {'r', 6}, {'s', 4}, {'t', 6}, {'u', 4}, {'v', 2}, {'w', 2}, {'x', 1},
-                {'y', 2}, {'z', 0}
-            };
+                    {
+                        {'a', 9}, {'b', 2},  {'c', 2}, {'d', 4}, {'e', 12}, {'f', 2}, {'g', 3},{'h', 2},
+                        {'i', 9}, {'j', 1}, {'k', 1}, {'l', 4}, {'m', 2}, {'n', 6}, {'o', 8}, {'p', 2},
+                        {'q', 0}, {'r', 6}, {'s', 4}, {'t', 6}, {'u', 4}, {'v', 2}, {'w', 2}, {'x', 1},
+                        {'y', 2}, {'z', 0}
+                    };
                     break;
-                case 2:
-                default:
+                case 3:
                     m_gridSize = 5; //sets the game settings
                     m_allowDiagonals = false;
                     m_minWordLength = 4;
                     MaxNumWords = 3;
                     letters = new Dictionary<char, int>() //fills letters with the alphabet and its values
-            {
-                {'a', 9}, {'b', 2},  {'c', 2}, {'d', 4}, {'e', 12}, {'f', 2}, {'g', 3},{'h', 2},
-                {'i', 9}, {'j', 1}, {'k', 1}, {'l', 4}, {'m', 2}, {'n', 6}, {'o', 8}, {'p', 2},
-                {'q', 0}, {'r', 6}, {'s', 4}, {'t', 6}, {'u', 4}, {'v', 2}, {'w', 2}, {'x', 1},
-                {'y', 2}, {'z', 0}
-            };
+                    {
+                        {'a', 9}, {'b', 2},  {'c', 2}, {'d', 4}, {'e', 12}, {'f', 2}, {'g', 3},{'h', 2},
+                        {'i', 9}, {'j', 1}, {'k', 1}, {'l', 4}, {'m', 2}, {'n', 6}, {'o', 8}, {'p', 2},
+                        {'q', 0}, {'r', 6}, {'s', 4}, {'t', 6}, {'u', 4}, {'v', 2}, {'w', 2}, {'x', 1},
+                        {'y', 2}, {'z', 0}
+                    };
+                    break;
+                case 1:
+                    m_gridSize = 3; //sets the game settings
+                    m_allowDiagonals = true;
+                    m_minWordLength = 3;
+                    MaxNumWords = 1;
+                    letters = new Dictionary<char, int>() //fills letters with the alphabet and its values
+                    {
+                        {'a', 9}, {'b', 2},  {'c', 2}, {'d', 4}, {'e', 12}, {'f', 2}, {'g', 3},{'h', 2},
+                        {'i', 9}, {'j', 1}, {'k', 1}, {'l', 4}, {'m', 2}, {'n', 6}, {'o', 8}, {'p', 2},
+                        {'q', 0}, {'r', 6}, {'s', 4}, {'t', 6}, {'u', 4}, {'v', 2}, {'w', 2}, {'x', 1},
+                        {'y', 2}, {'z', 0}
+                    };
                     break;
             }
 
             m_grid = new char[m_gridSize, m_gridSize]; //declares a 2D array with size m_gridSize
             m_swapCounter = 0; //resets the swap counter
 
-            System.Random random = new System.Random();
+            System.Random random = salt != 0 ? new System.Random(salt) : new System.Random();
 
             List<char> allLetters = new List<char>(); //initialises allLetters, a list of chars
             foreach(char key in letters.Keys) //fills all letters with each letter the amount of times of its value
@@ -407,7 +428,7 @@ namespace WordGameWpfApp
                 UpdateGameOverScores();
             }
             // if the maxSwaps has been reached, the game is lost
-            else if (m_MaxSwaps > 0 && m_swapCounter >= m_MaxSwaps)
+            else if ((m_MaxSwaps > 0 && m_swapCounter >= m_MaxSwaps))
             {
                 // sets the game state to complete lose
                 m_state = GameCompleteState.COMPLETE_LOSE;
@@ -476,12 +497,23 @@ namespace WordGameWpfApp
             m_wonPercentageScore = m_wonTotal / m_playedScore * 100;
         }
 
+        public int CalculateScores()
+        {
+            int score = (m_MaxSwaps - m_swapCounter) * 20 + (m_state == GameCompleteState.COMPLETE_WIN ? 1000 : 0);
 
+
+            return score;
+        }
 
         public enum GameCompleteState { NOT_COMPLETE, COMPLETE_WIN, COMPLETE_LOSE };
         public GameCompleteState IsGameComplete()
         {
             return m_state;
+        }
+
+        public void setGameState(GameCompleteState state)
+        {
+            m_state = state;
         }
 
         public string GetWonOrLostDisplay()
@@ -542,6 +574,10 @@ namespace WordGameWpfApp
         {
             InitializeComponent();
 
+            // Set the start time to the current time
+            m_StartTime = DateTime.Now;
+            m_GameDuration = TimeSpan.FromMinutes(5);
+
             m_IsDragging = false;
             m_DragStartIndex = new Point(-1, -1);
             m_HoverIndex = new Point(-1, -1);
@@ -556,6 +592,7 @@ namespace WordGameWpfApp
             WordCount.Text = m_game.GetFoundWordCount().ToString();
             Words.Text = string.Join("\n",m_game.GetFoundWords());
             SetSwapCountDisplay();
+            TimeRemainingLabel.Content = string.Format("{0:mm\\:ss}", m_TimeRemaining);
         }
 
         private void LetterGrid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -615,7 +652,24 @@ namespace WordGameWpfApp
             }
         }
 
-        
+        private TimeSpan GetTimeRemaining()
+        {
+            // Calculate the elapsed time since the start of the game
+            TimeSpan elapsedTime = DateTime.Now - m_StartTime;
+
+            // Calculate the time remaining in the game
+            TimeSpan m_TimeRemaining = m_GameDuration - elapsedTime;
+
+            // Make sure the time remaining is not negative
+            if (m_TimeRemaining < TimeSpan.Zero)
+            {
+                m_TimeRemaining = TimeSpan.Zero;
+                m_game.setGameState(WordGame.GameCompleteState.COMPLETE_LOSE);
+            }
+
+            return m_TimeRemaining;
+        }
+
         private void Reset_Button(object sender, RoutedEventArgs e)
         { //button listener which executes whenever NEW GAME button is clicked
             if (InputMaxSwaps.Text != "") //WILL BREAK IF !INT ENTERED
@@ -637,6 +691,16 @@ namespace WordGameWpfApp
             GameCompleteOverlay.Visibility = Visibility.Hidden;
         }
 
+        private void Share_Button(object sender, RoutedEventArgs e)
+        {
+            int score = m_game.CalculateScores();
+
+            Clipboard.SetText(score.ToString());
+        }
+
+        public TimeSpan m_TimeRemaining;
+        private DateTime m_StartTime;
+        private TimeSpan m_GameDuration;
         WordGame m_game;
         private DrawGrid drawGrid = new DrawGrid();
         Point m_DragStartIndex;
