@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WordGameWpfApp"
         mc:Ignorable="d"
-        Title="Word Game" WindowStartupLocation="CenterScreen" Height="580" Width="566">
+        Title="Word Game" WindowStartupLocation="CenterScreen" Height="555" Width="566">
     <Grid Margin="0,0,10,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="541*"/>
@@ -201,8 +201,8 @@
             <ComboBoxItem Content="Hard"/>
             <ComboBoxItem Content="Impossible"/>
         </ComboBox>
-        <Button Click="Reset_Button" FontSize="30" FontFamily="consolas" Margin="0,507,0,0" Height="40" VerticalAlignment="Top" 
-                HorizontalAlignment="Center" Width="146">New game</Button>
+        <Button Click="Reset_Button" FontSize="30" FontFamily="consolas" Margin="0,0,0,17" 
+                HorizontalAlignment="Center" Width="146" Height="40" VerticalAlignment="Bottom">New game</Button>
         <TextBox x:Name="InputMaxSwaps" HorizontalAlignment="Left" Margin="123,0,0,25" Width="51" Height="18" VerticalAlignment="Bottom"/>
         <TextBox Text="Enter max swaps:" Margin="22,0,0,25" Height="18" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="101"/>
         <TextBox IsReadOnly="True"  FontSize="18" Margin="278,25,0,0" FontFamily="consolas" RenderTransformOrigin="0.563,0.584" 

@@ -101,11 +101,11 @@ namespace WordGameWpfApp
                     break;
                 case WordGame.GameCompleteState.NOT_COMPLETE:
                 GameCompleteOverlay.Visibility = Visibility.Hidden;
-                msg = "eeeeeeee";
+                msg = "not complete";
                     break;
             }
             // send winning message in consol for debugging
-            Debug.Write(msg);
+            Debug.WriteLine(msg);
         }
 
         public void DisplayGameOver(Grid GameCompleteOverlay, WordGame game, TextBox PlayedScore, 
@@ -143,6 +143,7 @@ namespace WordGameWpfApp
             index.X = Math.Floor(pos.X / (space + size));
             index.Y = Math.Floor(pos.Y / (space + size));
 
+            Debug.WriteLine("ConvertPosToGridIndex - index:" + index);
             return index;
         }
 
@@ -592,7 +593,7 @@ namespace WordGameWpfApp
             WordCount.Text = m_game.GetFoundWordCount().ToString();
             Words.Text = string.Join("\n",m_game.GetFoundWords());
             SetSwapCountDisplay();
-            TimeRemainingLabel.Content = string.Format("{0:mm\\:ss}", m_TimeRemaining);
+            //TimeRemainingLabel.Content = string.Format("{0:mm\\:ss}", m_TimeRemaining);
         }
 
         private void LetterGrid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -601,6 +602,8 @@ namespace WordGameWpfApp
          
             m_IsDragging = true;
             m_DragStartIndex = index;
+
+            Debug.WriteLine("LetterGrid_MouseDown - dragging: " + m_IsDragging + ", dragStartIndex: " + m_DragStartIndex);
         }
 
         private void LetterGrid_MouseUp(object sender, MouseButtonEventArgs e)
@@ -620,6 +623,7 @@ namespace WordGameWpfApp
                 WordCount.Text = m_game.GetFoundWordCount().ToString();
                 SetSwapCountDisplay();
             }
+            Debug.WriteLine("LetterGrid_MouseUp - swapping: (" + (int)m_DragStartIndex.X + ", "+ (int)m_DragStartIndex.Y + ") with (" + (int)index.X +", "+ (int)index.Y + ")");
         }
         private void LetterGrid_MouseMove(object sender, MouseEventArgs e)
         {
@@ -631,6 +635,7 @@ namespace WordGameWpfApp
 
                 drawGrid.DrawRectangles(LetterGrid, GameCompleteOverlay, m_game, m_HoverIndex, m_DragStartIndex);
             }
+            Debug.WriteLine("LetterGrid_MouseMove - index: " + m_HoverIndex);
         }
         private void LetterGrid_Background_MouseDown(object sender, RoutedEventArgs e)
         {
@@ -638,6 +643,7 @@ namespace WordGameWpfApp
             {
                 GameCompleteOverlay.Visibility = Visibility.Hidden;
             }
+            Debug.WriteLine("LetterGrid_Background_MouseDown");
         }
 
         private void SetSwapCountDisplay() //updates the swap counter on screen
@@ -693,9 +699,17 @@ namespace WordGameWpfApp
 
         private void Share_Button(object sender, RoutedEventArgs e)
         {
+            int IntDifficulty = GridSize.SelectedIndex;
+            String difficulty = IntDifficulty == 0 ? "Daily Challenge" : IntDifficulty == 1 ? "Easy" : IntDifficulty == 2 ? "Normal" : "Impossible";
             int score = m_game.CalculateScores();
+            int swaps = m_game.GetSwapCounter();
+            int wordCount = m_game.GetFoundWordCount();
 
-            Clipboard.SetText(score.ToString());
+            Clipboard.SetText(
+                "Splot score! \n" 
+                + "Difficulty: " + difficulty + "\n" 
+                + "🏆 Score: " + score.ToString() + "\n" 
+                + "↔️ Swaps: " + swaps.ToString());
         }
 
         public TimeSpan m_TimeRemaining;
